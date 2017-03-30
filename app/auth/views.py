@@ -3,7 +3,7 @@
 
 from flask import render_template, request, flash, redirect, url_for, jsonify, json
 from . import auth
-from ..models import User
+from ..models import User, Car
 from .. import db, login_manager
 from flask_login import login_user, logout_user, current_user, login_required
 
@@ -50,3 +50,13 @@ def myInfo():
     user = current_user
     response = {"name": user.name, "password": user.password, "phone": user.phone}
     return jsonify(response)
+
+@auth.route('/addCar', methods=['POST'])
+@login_required
+def addCar():
+    user = current_user
+    car = Car(id="1", brand="奥迪", model="A6", style="2016",registerAddress="上海",registerTime="2016",divermMileage="3000")
+    user.cars = car
+    res = user.cars.brand
+
+    return res

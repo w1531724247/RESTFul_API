@@ -5,13 +5,12 @@ from . import db, login_manager
 from flask_login import UserMixin, AnonymousUserMixin
 from datetime import datetime
 
-
 class User(UserMixin, db.Model):
-    __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     phone = db.Column(db.String)
     password = db.Column(db.String)
+    cars = db.Column(db.String)
 
     def __init__(self, name="", password="", phone=""):
         self.name = name
@@ -24,7 +23,6 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 class Car(db.Model):
-    __tablename__ = 'cars'
     id = db.Column(db.Integer, primary_key=True)
     brand = db.Column(db.String)#品牌
     model = db.Column(db.String)#型号
@@ -34,21 +32,19 @@ class Car(db.Model):
     divermMileage = db.Column(db.String)#行使里程
 
 class CarBrand(db.Model):
-    __tablename__ = 'carBrand'
     id = db.Column(db.Integer, primary_key=True)
     brand_name = db.Column(db.String)#品牌
     initial = db.Column(db.String)#首字母
-    update_time = db.Column(db.DateTime)
+    update_time = db.Column(db.String)
 
 class CarSeries(db.Model):
-    __tablename__ = 'carSeries'
     id = db.Column(db.Integer, primary_key=True)
+    maker_type = db.Column(db.String)
     series_name = db.Column(db.String)
     series_group_name = db.Column(db.String)
-    update_time = db.Column(db.DateTime)
+    update_time = db.Column(db.String)
 
 class City(db.Model):
-    __tablename__ = 'city'
     id = db.Column(db.Integer, primary_key=True)
     city_name = db.Column(db.String)
     admin_code = db.Column(db.String)
