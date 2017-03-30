@@ -17,5 +17,7 @@ def create_app(config_name='default'):
 
     from auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
+    from base import base as base_blueprint
+    app.register_blueprint(base_blueprint, url_prefix='/base')
 
     return app

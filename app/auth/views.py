@@ -15,13 +15,13 @@ def register():
     name = dict.get('name')
     password = dict.get('password')
     password2 = dict.get('password2')
-    email = dict.get('email')
+    phone = dict.get('phone')
     #判断用户是否已经注册过了
     user = User.query.filter_by(name=name).first()
     if user is not None:
         return u"您已经注册过了!请登录!"
 
-    newUser = User(name=name, password=password, email=email)
+    newUser = User(name=name, password=password, phone=phone)
     db.session.add(newUser)
     db.session.commit()
 
@@ -48,5 +48,5 @@ def log_out():
 @login_required
 def myInfo():
     user = current_user
-    response = {"name": user.name, "password": user.password, "email": user.email}
+    response = {"name": user.name, "password": user.password, "phone": user.phone}
     return jsonify(response)
