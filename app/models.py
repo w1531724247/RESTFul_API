@@ -10,7 +10,6 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String)
     phone = db.Column(db.String)
     password = db.Column(db.String)
-    cars = db.Column(db.String)
 
     def __init__(self, name="", password="", phone=""):
         self.name = name
@@ -30,6 +29,7 @@ class Car(db.Model):
     registerAddress = db.Column(db.String)#注册地点
     registerTime = db.Column(db.String)#注册时间
     divermMileage = db.Column(db.String)#行使里程
+    user_id = db.Column(db.String)#所属的用户
 
 class CarBrand(db.Model):
     id = db.Column(db.Integer, primary_key=True)
