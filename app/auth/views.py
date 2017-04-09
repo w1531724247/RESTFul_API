@@ -29,15 +29,15 @@ def register():
 
 @auth.route('/log_in', methods=['GET', 'POST'])
 def log_in():
-    parameters = request.get_data()
-    dict = json.loads(parameters)
-
-    name = dict.get('name')
-    password = dict.get('password')
+    # parameters = request.get_data()
+    name = request.form['name']#dict.get('name')
+    password = request.form['password']#dict.get('password')
 
     user = User.query.filter_by(name=name, password=password).first()
     login_user(user)
-    return "log_in: " + user.name
+    response = {"name": user.name, "password": user.password, "phone": user.phone}
+
+    return jsonify(response)
 
 @auth.route('/log_out', methods=['GET', 'POST'])
 def log_out():
