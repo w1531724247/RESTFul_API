@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-from . import db, login_manager
-from flask_login import UserMixin, AnonymousUserMixin
+from . import db
 from datetime import datetime
+from flask import jsonify
 
-class User(UserMixin, db.Model):
+class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     phone = db.Column(db.String)
@@ -15,7 +15,7 @@ class User(UserMixin, db.Model):
         self.name = name
         self.phone = phone
         self.password = password
-        return
+        pass
 
     def modelToDict(self):
         dict = {"name": self.name, "password": self.password, "phone": self.phone}
@@ -28,10 +28,6 @@ class User(UserMixin, db.Model):
         phone = dict["phone"]
         user = User(name=name, password=password, phone=phone)
         return user
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
 
 class Car(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -63,3 +59,24 @@ class City(db.Model):
     initial = db.Column(db.String)
     prov_id = db.Column(db.String)
     prov_name = db.Column(db.String)
+
+class ESResponse():
+    code = 0
+    data = None
+    errorMsg = None
+    def __init__(self, code=0, data=None, errorMsg=None):
+        self.code = code
+        self.data = data
+        self.errorMsg = errorMsg
+        pass
+
+    def to_json(self):
+        responseDict = {}
+        responseDict["code"] = self.code
+
+        if self.data is not None:
+            responseDict["data"] = self.data
+        if self.errorMsg is not None:
+            responseDict["errorMsg"] = self.errorMsg
+
+        return jsonify(responseDict)

@@ -2,15 +2,16 @@ from flask import Flask, g
 from flask_tokenauth import TokenAuth, TokenManager
 
 app = Flask(__name__)
-secret_key = 'really big secret'
+secret_key = 'shanghaienshengqichefuwuyouxiangongsi'
 token_auth = TokenAuth(secret_key=secret_key)
 token_manager = TokenManager(secret_key=secret_key)
 
-allowed_users = ['bob']
+allowed_users = ['lfc']
 
 @app.route('/')
 @token_auth.token_required
 def index():
+
     return "Hello, {}!".format(g.current_user)
 
 
