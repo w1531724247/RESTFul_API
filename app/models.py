@@ -17,6 +17,18 @@ class User(UserMixin, db.Model):
         self.password = password
         return
 
+    def modelToDict(self):
+        dict = {"name": self.name, "password": self.password, "phone": self.phone}
+        return dict
+
+    @classmethod
+    def modelWithDictionary(cls, dict=None):
+        name = dict["name"]
+        password = dict["password"]
+        phone = dict["phone"]
+        user = User(name=name, password=password, phone=phone)
+        return user
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))

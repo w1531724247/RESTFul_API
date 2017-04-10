@@ -34,10 +34,13 @@ def log_in():
     password = request.form['password']#dict.get('password')
 
     user = User.query.filter_by(name=name, password=password).first()
-    login_user(user)
-    response = {"name": user.name, "password": user.password, "phone": user.phone}
+    if user is None:
+        return
+    else:
+        login_user(user)
+        userDict = user.modelToDict()
 
-    return jsonify(response)
+    return jsonify(userDict)
 
 @auth.route('/log_out', methods=['GET', 'POST'])
 def log_out():
