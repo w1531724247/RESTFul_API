@@ -6,61 +6,26 @@ from . import auth
 from ..models import User, Car, ESResponse
 from .. import db
 from flask_tokenauth import TokenAuth, TokenManager
-import urllib2, urllib
-import time
-import random
-import hashlib
+
 
 secret_key = 'shanghaienshengqichefuwuyouxiangongsi'
 token_auth = TokenAuth(secret_key=secret_key)
 token_manager = TokenManager(secret_key=secret_key)
 
-netEasyAppkey = '92bf851a021b70338c382258f3025984'
-netEasyAppSecret = '019bdb177012'
+#获取验证码
+@auth.route('/index')
+def index():
+    return "嘿凤梨"
 
 #获取验证码
 @auth.route('/getVerifyCode')
 def getVerifyCode():
 
-
-    url = 'https://api.netease.im/sms/sendcode.action'
-    params = {'mobile':'18321165691'}
-    params_urlencode = urllib.urlencode(params)
-
-    req = urllib2.Request(url=url, data=params_urlencode)
-    req.add_header('AppKey', netEasyAppkey)
-    curTime = str(time.time())
-    req.add_header('CurTime', curTime)
-    nonce = str(random.uniform(1000, 9999))
-    req.add_header('Nonce', nonce)
-    checkSum = hashlib.sha1(netEasyAppSecret + nonce + curTime).hexdigest()
-    req.add_header('CheckSum', checkSum)
-    req.add_header('Content-Type', 'application/x-www-form-urlencoded')
-
-    res_data = urllib2.urlopen(req)
-    res = res_data.read()
-    #{"code":200,"msg":"1","obj":"6560"}
-    print(res)
     return "OK"
 
 #校验验证码
 @auth.route('/confirmVerifyCode')
 def confirmVerifyCode():
-    url = 'https://api.netease.im/sms/verifycode.action'
-    params = {'mobile':'18321165691', 'code':'6560'}
-    params_urlencode = urllib.urlencode(params)
-
-    req = urllib2.Request(url=url, data=params_urlencode)
-    req.add_header('AppKey', netEasyAppkey)
-    curTime = str(time.time())
-    req.add_header('CurTime', curTime)
-    nonce = str(random.uniform(1000, 9999))
-    req.add_header('Nonce', nonce)
-    checkSum = hashlib.sha1(netEasyAppSecret + nonce + curTime).hexdigest()
-    req.add_header('CheckSum', checkSum)
-    req.add_header('Content-Type', 'application/x-www-form-urlencoded')
-    res_data = urllib2.urlopen(req)
-    res = res_data.read()
 
     return "OK"
 
