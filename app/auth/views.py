@@ -5,47 +5,55 @@ from flask import render_template, request, flash, redirect, url_for, json, json
 from . import auth
 from ..models import User, Car, ESResponse
 from .. import db
+from ..tools import httpRequest
 from flask_tokenauth import TokenAuth, TokenManager
-
 
 secret_key = 'shanghaienshengqichefuwuyouxiangongsi'
 token_auth = TokenAuth(secret_key=secret_key)
 token_manager = TokenManager(secret_key=secret_key)
 
 #获取验证码
-@auth.route('/index')
-def index():
-    return "嘿凤梨"
-
-#获取验证码
 @auth.route('/getVerifyCode')
-def getVerifyCode():
+def sendVerifyCode():
+    phone = request.form['phone']
+    res = httpRequest.requestVerifyCode(phone=phone)
 
-    return "OK"
+    #{"code":200,"msg":"1","obj":"6560"}
+    dict = json.loads(res)
+    resCode = dict.get('code')
+    if resCode == 200:
+        return ESResponse(code=200, data=dict).to_json()
+    else:
+        return ESResponse(code=400, data=dict).to_json()
 
 #校验验证码
 @auth.route('/confirmVerifyCode')
 def confirmVerifyCode():
+    phone = request.form['phone']
+    code = request.form['code']
 
-    return "OK"
+    res = httpRequest.requestVerifyCode(phone=phone,code=code)
+    dict = json.loads(res)
+    resCode = dict.get('code')
+    if resCode == 200:
+        return ESResponse(code=200,data=dict).to_json()
+    else:
+        return False
 
 @auth.route('/register', methods=['POST'])
 def register():
-    parameters = request.get_data()
-    dict = json.loads(parameters)
+    phone = request.form['phone']
+    name = request.form['name']
+    password = request.form['password']
+    password2 = request.form['password2']
 
-    name = dict.get('name')
-    password = dict.get('password')
-    password2 = dict.get('password2')
-    phone = dict.get('phone')
     #判断用户是否已经注册过了
-    user = User.query.filter_by(phone=phone).first()
+    user = User.objects(phone=phone).first()
     if user is not None:
         return ESResponse(code=400, errorMsg="您已经注册过了, 请登录!").to_json()
 
     newUser = User(name=name, password=password, phone=phone)
-    db.session.add(newUser)
-    db.session.commit()
+    newUser.save()
 
     return ESResponse(code=200).to_json()
 
@@ -54,11 +62,11 @@ def log_in():
     phone = request.form['phone']
     password = request.form['password']
 
-    user = User.query.filter_by(phone=phone, password=password).first()
+    user = User.objects(phone=phone, password=password).first()
     if user is None:
         return ESResponse(code=400, errorMsg="用户名或密码错误").to_json()
     else:
-        userDict = user.modelToDict()
+        userDict = user.to_dict()
         token = token_manager.generate(phone)
 
     tokenDict = {"token":token}
@@ -90,7 +98,7 @@ def addCar():
 @token_auth.verify_token
 def verify_token(token):
     phone = token_manager.verify(token)
-    user = User.query.filter_by(phone=phone).first()
+    user = User.objects(phone=phone).first()
     if user is not None:
         print(user.phone)
         g.current_user = phone

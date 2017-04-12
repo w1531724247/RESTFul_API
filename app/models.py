@@ -5,19 +5,13 @@ from . import db
 from datetime import datetime
 from flask import jsonify
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    phone = db.Column(db.String)
-    password = db.Column(db.String)
+class User(db.Document):
+    user_id = db.StringField()
+    name = db.StringField()
+    phone = db.StringField()
+    password = db.StringField()
 
-    def __init__(self, name="", password="", phone=""):
-        self.name = name
-        self.phone = phone
-        self.password = password
-        pass
-
-    def modelToDict(self):
+    def to_dict(self):
         dict = {"name": self.name, "password": self.password, "phone": self.phone}
         return dict
 
@@ -29,36 +23,36 @@ class User(db.Model):
         user = User(name=name, password=password, phone=phone)
         return user
 
-class Car(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    brand = db.Column(db.String)#品牌
-    model = db.Column(db.String)#型号
-    style = db.Column(db.String)#款式
-    registerAddress = db.Column(db.String)#注册地点
-    registerTime = db.Column(db.String)#注册时间
-    divermMileage = db.Column(db.String)#行使里程
-    user_id = db.Column(db.String)#所属的用户
+class Car(db.Document):
+    car_id = db.StringField()
+    brand = db.StringField()#品牌
+    model = db.StringField()#型号
+    style = db.StringField()#款式
+    registerAddress = db.StringField()#注册地点
+    registerTime = db.StringField()#注册时间
+    divermMileage = db.StringField()#行使里程
+    user_id = db.StringField()#所属的用户
 
-class CarBrand(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    brand_name = db.Column(db.String)#品牌
-    initial = db.Column(db.String)#首字母
-    update_time = db.Column(db.String)
+class CarBrand(db.Document):
+    id = db.StringField()
+    brand_name = db.StringField()#品牌
+    initial = db.StringField()#首字母
+    update_time = db.StringField()
 
-class CarSeries(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    maker_type = db.Column(db.String)
-    series_name = db.Column(db.String)
-    series_group_name = db.Column(db.String)
-    update_time = db.Column(db.String)
+class CarSeries(db.Document):
+    id = db.StringField()
+    maker_type = db.StringField()
+    series_name = db.StringField()
+    series_group_name = db.StringField()
+    update_time = db.StringField()
 
-class City(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    city_name = db.Column(db.String)
-    admin_code = db.Column(db.String)
-    initial = db.Column(db.String)
-    prov_id = db.Column(db.String)
-    prov_name = db.Column(db.String)
+class City(db.Document):
+    id = db.StringField()
+    city_name = db.StringField()
+    admin_code = db.StringField()
+    initial = db.StringField()
+    prov_id = db.StringField()
+    prov_name = db.StringField()
 
 class ESResponse():
     code = 0

@@ -1,8 +1,8 @@
 from flask import Flask, request
-from flask_sqlalchemy import SQLAlchemy
+from flask_mongoengine import MongoEngine
 from config import config
 
-db = SQLAlchemy()
+db = MongoEngine()
 
 def create_app(config_name='default'):
     app = Flask(__name__)

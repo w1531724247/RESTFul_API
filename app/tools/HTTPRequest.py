@@ -3,8 +3,6 @@
 import urllib2, urllib, time, random, hashlib
 from flask import json
 
-
-
 class HTTPRequest():
     netEasyAppkey = '92bf851a021b70338c382258f3025984'
     netEasyAppSecret = '019bdb177012'
@@ -12,7 +10,6 @@ class HTTPRequest():
     def requestVerifyCode(self, phone=None):
         if phone is None:
             return False
-
         url = 'https://api.netease.im/sms/sendcode.action'
         params = {'mobile':phone}
         params_urlencode = urllib.urlencode(params)
@@ -30,16 +27,9 @@ class HTTPRequest():
         res_data = urllib2.urlopen(req)
         res = res_data.read()
 
-        #{"code":200,"msg":"1","obj":"6560"}
-        dict = json.loads(res)
-        resCode = dict.get('code')
-        if resCode == 200:
-            return True
-        else:
-            return False
+        return res
 
     def confirmVerifyCode(self,phone=None, code=None):
-
         if phone is None:
             return False
         elif code is None:
@@ -61,9 +51,4 @@ class HTTPRequest():
         res_data = urllib2.urlopen(req)
         res = res_data.read()
 
-        dict = json.loads(res)
-        resCode = dict.get('code')
-        if resCode == 200:
-            return True
-        else:
-            return False
+        return res
