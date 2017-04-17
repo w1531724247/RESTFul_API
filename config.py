@@ -15,10 +15,9 @@ class Config:
     def init_app(app):
         pass
 
-
 class DevelopmentConfig(Config):
     DEBUG = True
-    MONGODB_SETTINGS = {"DB":"testing4"}
+    MONGODB_SETTINGS = {"DB":"es_testing_db"}
     TESTING = True
 
 class TestingConfig(Config):
